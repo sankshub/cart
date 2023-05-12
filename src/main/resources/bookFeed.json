@@ -1,53 +1,53 @@
 [
-    {
-      "isbn":"123456789",
-      "title":"Clean Code",
-      "author": {
-        "firstName" : "Robert",
-        "lastName": "Martin"
-      },
-      "yearOfPublish":"2008",
-      "price":"50"
+  {
+    "isbn": "123456789",
+    "title": "Clean Code",
+    "author": {
+      "firstName": "Robert",
+      "lastName": "Martin"
     },
-    {
-      "isbn":"234567891",
-      "title":"The Clean Coder",
-      "author": {
-        "firstName" : "Robert",
-        "lastName": "Martin"
-      },
-      "yearOfPublish":"2011",
-      "price":"50"
+    "yearOfPublish": "2008",
+    "price": "50"
+  },
+  {
+    "isbn": "234567891",
+    "title": "The Clean Coder",
+    "author": {
+      "firstName": "Robert",
+      "lastName": "Martin"
     },
-    {
-      "isbn":"345678912",
-      "title":"Clean Architecture",
-      "author": {
-        "firstName" : "Robert",
-        "lastName": "Martin"
-      },
-      "yearOfPublish":"2017",
-      "price":"50"
+    "yearOfPublish": "2011",
+    "price": "50"
+  },
+  {
+    "isbn": "345678912",
+    "title": "Clean Architecture",
+    "author": {
+      "firstName": "Robert",
+      "lastName": "Martin"
     },
-    {
-      "isbn":"456789123",
-      "title":"Test Driven Development by Example",
-      "author": {
-        "firstName" : "Kent",
-        "lastName": "Beck"
-      },
-      "yearOfPublish":"2003",
-      "price":"50"
+    "yearOfPublish": "2017",
+    "price": "50"
+  },
+  {
+    "isbn": "456789123",
+    "title": "Test Driven Development by Example",
+    "author": {
+      "firstName": "Kent",
+      "lastName": "Beck"
     },
-    {
-      "isbn":"567891234",
-      "title":"Working Effectively With Legacy Code",
-      "author": {
-        "firstName" : "Michael",
-        "middleName" :  "C.",
-        "lastName": "Feathers"
-      },
-      "yearOfPublish":"2004",
-      "price":"50"
-    }
+    "yearOfPublish": "2003",
+    "price": "50"
+  },
+  {
+    "isbn": "567891234",
+    "title": "Working Effectively With Legacy Code",
+    "author": {
+      "firstName": "Michael",
+      "middleName": "C.",
+      "lastName": "Feathers"
+    },
+    "yearOfPublish": "2004",
+    "price": "50"
+  }
 ]
