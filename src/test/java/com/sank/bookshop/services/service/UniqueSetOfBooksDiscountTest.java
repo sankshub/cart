@@ -144,5 +144,22 @@ public class UniqueSetOfBooksDiscountTest {
                                         .contains(legacyCodeBook));
     }
 
+    @Test
+    public void getSameBookAsGivenInRequest_With_2_Books() {
+        ShoppingOrder simpleShoppingTwoBooks = new ShoppingOrder(legacyCodeBook, 1);
+        simpleCart.add(simpleShoppingTwoBooks);
+        DiscountedCart discountedCart = discountCalculationService.calculateDiscount(simpleCart);
+
+        Assert.assertEquals(1, discountedCart.getBookSet()
+                                             .size());
+        Assert.assertEquals(2, discountedCart.getBookSet()
+                                             .get(0)
+                                             .getBooks()
+                                             .size());
+        Assert.assertTrue(discountedCart.getBookSet()
+                                        .get(0)
+                                        .getBooks()
+                                        .contains(cleanCodeBook));
+    }
 
 }
