@@ -24,20 +24,20 @@ public class UniqueSetDiscountValidator {
         checkDuplicateItemsInCart(shoppingOrderList);
     }
 
-    public static void checkCartItems(List<ShoppingOrder> shoppingOrderList) throws ShoppingCartException {
+    private static void checkCartItems(List<ShoppingOrder> shoppingOrderList) throws ShoppingCartException {
         if (CollectionUtils.isEmpty(shoppingOrderList))
             throw new ShoppingCartException(EMPTY_CART_ERROR);
 
     }
 
-    public static void checkMinQuantityPerOrder(List<ShoppingOrder> shoppingOrderList) throws ShoppingCartException {
+    private static void checkMinQuantityPerOrder(List<ShoppingOrder> shoppingOrderList) throws ShoppingCartException {
         if (shoppingOrderList.stream()
                              .anyMatch(book -> book.getQuantity() == null || book.getQuantity() < 1))
             throw new ShoppingCartException(MINIMUM_BOOK_QUANTITY_ERROR);
 
     }
 
-    public static void checkDuplicateItemsInCart(List<ShoppingOrder> shoppingOrderList) throws DuplicateEntriesInCartException {
+    private static void checkDuplicateItemsInCart(List<ShoppingOrder> shoppingOrderList) throws DuplicateEntriesInCartException {
         boolean isDuplicateBookFound = shoppingOrderList.stream()
                                                         .map(ShoppingOrder::getBook)
                                                         .collect(Collectors.toList())

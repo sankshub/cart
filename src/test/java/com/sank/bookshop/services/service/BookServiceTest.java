@@ -18,7 +18,7 @@ import static org.mockito.Mockito.when;
 
 @RunWith(MockitoJUnitRunner.class)
 public class BookServiceTest {
-    private static final String BOOK_NOT_FOUND_ERROR = "Requested book not found, Please try with valid ISBN ";
+    private static final String BOOK_NOT_FOUND_ERROR = "Requested book not found/ISBN is null, Please try with valid ISBN ";
     @Mock
     BookRepo bookRepo;
     Book book = new Book();

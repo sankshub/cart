@@ -11,7 +11,7 @@ import java.util.List;
 
 @Service
 public class BookServiceImpl implements BookService {
-    private static final String BOOK_NOT_FOUND_ERROR = "Requested book not found, Please try with valid ISBN ";
+    private static final String BOOK_NOT_FOUND_ERROR = "Requested book not found/ISBN is null, Please try with valid ISBN ";
     @Autowired
     BookRepo bookRepo;
 
