@@ -3,8 +3,9 @@ package com.sank.bookshop.services.service;
 import com.sank.bookshop.repos.entity.Author;
 import com.sank.bookshop.repos.entity.Book;
 import com.sank.bookshop.services.exceptions.DuplicateEntriesInCartException;
-import com.sank.bookshop.services.exceptions.OrderQuantityException;
+import com.sank.bookshop.services.exceptions.ShoppingCartException;
 import com.sank.bookshop.services.model.DiscountOffer;
+import com.sank.bookshop.services.model.DiscountedCart;
 import com.sank.bookshop.services.model.ShoppingOrder;
 import org.junit.Assert;
 import org.junit.Before;
@@ -20,32 +21,39 @@ import java.util.List;
 public class UniqueSetOfBooksDiscountTest {
     private static final String MINIMUM_BOOK_QUANTITY_ERROR = "Minimum 1 quantity required per order Check and request again";
     private static final String DUPLICATE_BOOK_ENTRY_ERROR = "Duplicate book entry found in Cart, Remove it and request again";
+    private static final String EMPTY_CART_ERROR = "Cart is Empty, add items and request again";
     private static final String OFFER_MESSAGE = "Buy different copies of books to get maximum discount!";
     List<ShoppingOrder> cartWithoutQuantity = new ArrayList<>();
-    List<ShoppingOrder> cartWithDupicates = new ArrayList<>();
+    List<ShoppingOrder> cartWithDuplicates = new ArrayList<>();
+    List<ShoppingOrder> simpleCart = new ArrayList<>();
+
+    Book cleanCodeBook = new Book();
     @InjectMocks
     UniqueSetOfBooksDiscount discountCalculationService;
 
     @Before
     public void setUp() throws Exception {
-        Book book = new Book();
-        book.setIsbn("123456789");
-        book.setTitle("Clean Code");
+
+        cleanCodeBook.setIsbn("123456789");
+        cleanCodeBook.setTitle("Clean Code");
         Author author = new Author();
         author.setFirstName("Robert");
         author.setMiddleName(null);
         author.setLastName("Martin");
-        book.setAuthor(author);
-        book.setYearOfPublish("2008");
-        book.setPrice("50");
+        cleanCodeBook.setAuthor(author);
+        cleanCodeBook.setYearOfPublish("2008");
+        cleanCodeBook.setPrice("50.0");
 
-        ShoppingOrder orderWithZeroBooks = new ShoppingOrder(book, 0);
+        ShoppingOrder orderWithZeroBooks = new ShoppingOrder(cleanCodeBook, 0);
         cartWithoutQuantity.add(orderWithZeroBooks);
 
-        ShoppingOrder ShoppingOrder = new ShoppingOrder(book, 1);
-        ShoppingOrder duplicateShoppingOrder = new ShoppingOrder(book, 1);
-        cartWithDupicates.add(ShoppingOrder);
-        cartWithDupicates.add(duplicateShoppingOrder);
+        ShoppingOrder shoppingOrder = new ShoppingOrder(cleanCodeBook, 1);
+        ShoppingOrder duplicateShoppingOrder = new ShoppingOrder(cleanCodeBook, 1);
+        cartWithDuplicates.add(shoppingOrder);
+        cartWithDuplicates.add(duplicateShoppingOrder);
+
+        ShoppingOrder simpleShoppingOrder = new ShoppingOrder(cleanCodeBook, 1);
+        simpleCart.add(simpleShoppingOrder);
 
     }
 
@@ -63,8 +71,16 @@ public class UniqueSetOfBooksDiscountTest {
     }
 
     @Test
+    public void calculateDiscountWithNull() {
+        Exception exception = Assert.assertThrows(ShoppingCartException.class, () -> {
+            discountCalculationService.calculateDiscount(null);
+        });
+        Assert.assertEquals(EMPTY_CART_ERROR, exception.getMessage());
+    }
+
+    @Test
     public void calculateDiscountWithZeroBook() {
-        Exception exception = Assert.assertThrows(OrderQuantityException.class, () -> {
+        Exception exception = Assert.assertThrows(ShoppingCartException.class, () -> {
             discountCalculationService.calculateDiscount(cartWithoutQuantity);
         });
         Assert.assertEquals(MINIMUM_BOOK_QUANTITY_ERROR, exception.getMessage());
@@ -73,8 +89,32 @@ public class UniqueSetOfBooksDiscountTest {
     @Test
     public void calculateDiscountWithDuplicateBook() {
         Exception exception = Assert.assertThrows(DuplicateEntriesInCartException.class, () -> {
-            discountCalculationService.calculateDiscount(cartWithDupicates);
+            discountCalculationService.calculateDiscount(cartWithDuplicates);
         });
         Assert.assertEquals(DUPLICATE_BOOK_ENTRY_ERROR, exception.getMessage());
     }
+
+    @Test
+    public void getSameBookAsGivenInRequest() {
+        DiscountedCart discountedCart = discountCalculationService.calculateDiscount(simpleCart);
+        Assert.assertEquals(1, discountedCart.getBookSet()
+                                             .size());
+        Assert.assertEquals(1, discountedCart.getBookSet()
+                                             .get(0)
+                                             .getBooks()
+                                             .size());
+        Assert.assertTrue(discountedCart.getBookSet()
+                                        .get(0)
+                                        .getBooks()
+                                        .contains(cleanCodeBook));
+    }
+
+    @Test
+    public void getDiscountedAndRealCostForABook() {
+        DiscountedCart discountedCart = discountCalculationService.calculateDiscount(simpleCart);
+        Assert.assertEquals(cleanCodeBook.getPrice(), String.valueOf(discountedCart.getRealCostWithoutDiscount()));
+        Assert.assertEquals(cleanCodeBook.getPrice(), String.valueOf(discountedCart.getTotalCostAfterDiscount()));
+    }
+
+
 }
