@@ -9,5 +9,5 @@ import java.util.List;
 public class DiscountedCart {
     List<BookSet> bookSet;
     Double totalCostAfterDiscount;
-    Double realCost;
+    Double realCostWithoutDiscount;
 }

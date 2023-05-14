@@ -13,5 +13,5 @@ public class ProcessedCart {
     @ApiModelProperty(position = 1, example = "500.00€")
     String totalCostAfterDiscount;
     @ApiModelProperty(position = 2, example = "800.00€")
-    String realCost;
+    String realCostWithoutDiscount;
 }

@@ -14,4 +14,8 @@ public class ShoppingOrder {
     public void changeQuantity(Integer quantity) {
         this.quantity = quantity;
     }
+
+    public Double getBookPrice() {
+        return Double.parseDouble(getBook().getPrice());
+    }
 }

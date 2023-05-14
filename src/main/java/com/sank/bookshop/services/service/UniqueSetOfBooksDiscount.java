@@ -2,6 +2,7 @@ package com.sank.bookshop.services.service;
 
 import com.sank.bookshop.repos.entity.Book;
 import com.sank.bookshop.services.exceptions.DuplicateEntriesInCartException;
+import com.sank.bookshop.services.exceptions.OrderQuantityException;
 import com.sank.bookshop.services.model.*;
 import org.springframework.stereotype.Component;
 
@@ -14,6 +15,7 @@ public class UniqueSetOfBooksDiscount implements DiscountCalculationService {
     private static final List<UniqueBookOffer> UNIQUE_BOOK_OFFERS = new ArrayList<>();
     private static final Integer MINIMUM_BASKET_SIZE = 1;
     private static final String DUPLICATE_BOOK_ENTRY_ERROR = "Duplicate book entry found in Cart, Remove it and request again";
+    private static final String MINIMUM_BOOK_QUANTITY_ERROR = "Minimum 1 quantity required per order Check and request again";
 
     private UniqueSetOfBooksDiscount() {
         UNIQUE_BOOK_OFFERS.add(new UniqueBookOffer(2, 5));
@@ -46,15 +48,25 @@ public class UniqueSetOfBooksDiscount implements DiscountCalculationService {
     }
 
     @Override
-    public List<UniqueBookOffer> getCurrentDiscountOffer() {
-        return UNIQUE_BOOK_OFFERS;
+    public List<DiscountOffer> getCurrentDiscountOffer() {
+        return Collections.unmodifiableList(UNIQUE_BOOK_OFFERS);
     }
 
     @Override
     public DiscountedCart calculateDiscount(List<ShoppingOrder> shoppingOrderList) {
+        minMaxQuantityPerOrder(shoppingOrderList);
         checkDuplicateItemsInCart(shoppingOrderList);
+        shoppingOrderList.sort(Comparator.comparingDouble(ShoppingOrder::getBookPrice)
+                                         .reversed());
         BookBasket bestBasket = getBestCombinationBookSets(shoppingOrderList);
         return getDiscountedCart(bestBasket);
+    }
+
+    private void minMaxQuantityPerOrder(List<ShoppingOrder> shoppingOrderList) throws DuplicateEntriesInCartException {
+        if (shoppingOrderList.stream()
+                             .anyMatch(book -> book.getQuantity() == null || book.getQuantity() < 1))
+            throw new OrderQuantityException(MINIMUM_BOOK_QUANTITY_ERROR);
+
     }
 
     private void checkDuplicateItemsInCart(List<ShoppingOrder> shoppingOrderList) throws DuplicateEntriesInCartException {

@@ -27,7 +27,7 @@
       "lastName": "Martin"
     },
     "yearOfPublish": "2017",
-    "price": "50"
+    "price": "52"
   },
   {
     "isbn": "456789123",
@@ -37,7 +37,7 @@
       "lastName": "Beck"
     },
     "yearOfPublish": "2003",
-    "price": "50"
+    "price": "55"
   },
   {
     "isbn": "567891234",
@@ -48,6 +48,6 @@
       "lastName": "Feathers"
     },
     "yearOfPublish": "2004",
-    "price": "50"
+    "price": "60"
   }
 ]

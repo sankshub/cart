@@ -2,6 +2,7 @@ package com.sank.bookshop.front.exceptions;
 
 import com.sank.bookshop.services.exceptions.BookNotFoundException;
 import com.sank.bookshop.services.exceptions.DuplicateEntriesInCartException;
+import com.sank.bookshop.services.exceptions.OrderQuantityException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -32,11 +33,12 @@ public class CustomizedResponseEntityExceptionHandler extends ResponseEntityExce
 
         return new ResponseEntity<>(exceptionResponse, HttpStatus.NOT_FOUND);
     }
-    @ExceptionHandler({DuplicateEntriesInCartException.class})
-    public final ResponseEntity<ExceptionResponse> handleBadRequestExceptions(DuplicateEntriesInCartException duplicateEntriesInCartException,
+
+    @ExceptionHandler({DuplicateEntriesInCartException.class, OrderQuantityException.class})
+    public final ResponseEntity<ExceptionResponse> handleBadRequestExceptions(Exception exception,
                                                                               WebRequest request) {
         ExceptionResponse exceptionResponse = new ExceptionResponse(LocalDateTime.now(),
-                duplicateEntriesInCartException.getMessage(),
+                exception.getMessage(),
                 request.getDescription(false));
 
         return new ResponseEntity<>(exceptionResponse, HttpStatus.BAD_REQUEST);

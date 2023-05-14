@@ -23,6 +23,9 @@ public class BookServiceImpl implements BookService {
     @Override
     public Book findByIsbn(String isbn) throws BookNotFoundException {
         List<Book> bookList = bookRepo.findAll();
-        return bookList.stream().filter(book -> StringUtils.equalsIgnoreCase(book.getIsbn(), isbn)).findAny().orElseThrow(()->new BookNotFoundException(BOOK_NOT_FOUND_ERROR));
+        return bookList.stream()
+                       .filter(book -> StringUtils.equalsIgnoreCase(book.getIsbn(), isbn))
+                       .findAny()
+                       .orElseThrow(() -> new BookNotFoundException(BOOK_NOT_FOUND_ERROR));
     }
 }
