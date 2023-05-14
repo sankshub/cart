@@ -28,6 +28,7 @@ public class UniqueSetOfBooksDiscountTest {
     List<ShoppingOrder> simpleCart = new ArrayList<>();
 
     Book cleanCodeBook = new Book();
+    Book legacyCodeBook = new Book();
     @InjectMocks
     UniqueSetOfBooksDiscount discountCalculationService;
 
@@ -43,6 +44,16 @@ public class UniqueSetOfBooksDiscountTest {
         cleanCodeBook.setAuthor(author);
         cleanCodeBook.setYearOfPublish("2008");
         cleanCodeBook.setPrice("50.0");
+
+        legacyCodeBook.setIsbn("567891234");
+        legacyCodeBook.setTitle("Working Effectively With Legacy Code");
+        Author authorLegacyCode = new Author();
+        authorLegacyCode.setFirstName("Michael");
+        authorLegacyCode.setMiddleName("C.");
+        authorLegacyCode.setLastName("Feathers");
+        legacyCodeBook.setAuthor(authorLegacyCode);
+        legacyCodeBook.setYearOfPublish("2004");
+        legacyCodeBook.setPrice("60.0");
 
         ShoppingOrder orderWithZeroBooks = new ShoppingOrder(cleanCodeBook, 0);
         cartWithoutQuantity.add(orderWithZeroBooks);
@@ -114,6 +125,23 @@ public class UniqueSetOfBooksDiscountTest {
         DiscountedCart discountedCart = discountCalculationService.calculateDiscount(simpleCart);
         Assert.assertEquals(cleanCodeBook.getPrice(), String.valueOf(discountedCart.getRealCostWithoutDiscount()));
         Assert.assertEquals(cleanCodeBook.getPrice(), String.valueOf(discountedCart.getTotalCostAfterDiscount()));
+    }
+
+    @Test
+    public void multipleBooksOfSameCopyInRequest() {
+        simpleCart.remove(0);
+        simpleCart.add(new ShoppingOrder(legacyCodeBook, 10));
+        DiscountedCart discountedCart = discountCalculationService.calculateDiscount(simpleCart);
+        Assert.assertEquals(10, discountedCart.getBookSet()
+                                              .size());
+        Assert.assertEquals(1, discountedCart.getBookSet()
+                                             .get(0)
+                                             .getBooks()
+                                             .size());
+        Assert.assertTrue(discountedCart.getBookSet()
+                                        .get(0)
+                                        .getBooks()
+                                        .contains(legacyCodeBook));
     }
 
 
