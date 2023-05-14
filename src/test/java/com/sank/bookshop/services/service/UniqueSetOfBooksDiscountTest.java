@@ -162,4 +162,12 @@ public class UniqueSetOfBooksDiscountTest {
                                         .contains(cleanCodeBook));
     }
 
+    @Test
+    public void getDiscountedAndRealCostForTwoBooks() {
+        ShoppingOrder simpleShoppingTwoBooks = new ShoppingOrder(legacyCodeBook, 1);
+        simpleCart.add(simpleShoppingTwoBooks);
+        DiscountedCart discountedCart = discountCalculationService.calculateDiscount(simpleCart);
+        Assert.assertEquals("110.0", String.valueOf(discountedCart.getRealCostWithoutDiscount()));
+    }
+
 }
