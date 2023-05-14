@@ -4,12 +4,12 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
 @ResponseStatus(HttpStatus.BAD_REQUEST)
-public class OrderQuantityException extends RuntimeException {
+public class ShoppingCartException extends RuntimeException {
 
-    public OrderQuantityException(String message) {
+    public ShoppingCartException(String message) {
         super(message);
     }
 
-    private OrderQuantityException() {
+    private ShoppingCartException() {
     }
 }
